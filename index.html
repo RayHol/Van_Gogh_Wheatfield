@@ -1,56 +1,50 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Vincent van Gogh | A Wheatfield</title>
-    <script src="https://threejs.org/build/three.js"></script>
-    <script src="https://threejs.org/examples/jsm/webxr/ARButton.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Smartify - Vincent van Gogh | A Wheatfield, with Cypresses</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar-nft.js"></script>
+    <style>
+        .a-enter-vr {
+            display: none;
+        }
+    </style>
 </head>
-<body style="margin: 0;">
-    <script>
-        const clock = new THREE.Clock();
+<body>
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+        <a-assets>
+            <video id="video" autoplay muted loop="true" crossorigin="anonymous"
+                   playsinline webkit-playsinline src=".\Assets\VG_Wip.mp4"></video>
+        </a-assets>
+
+        <a-nft>
+      type="nft" 
+              url="" 
+              smooth="true" 
+              smoothCount="10" 
+              smoothTolerance="".01" 
+              smoothThreshold="5"
+             
+            <a-video src="#video" width="1.2" height="1" position="0 0 0"></a-video>
+      
+      </a-nft>
+               
         
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.xr.enabled = true;
-        document.body.appendChild(renderer.domElement);
+        <a-entity camera look-controls></a-entity>
+    </a-scene>
 
-        document.body.appendChild(ARButton.createButton(renderer, { optionalFeatures: [ 'xr-hit-test' ] }));
-
-        const geometry = new THREE.PlaneBufferGeometry();
-        const video = document.createElement('video');
-        video.src = './Assets/VG_Wip.mp4'; // replace with video file
-        video.load();
-        video.play();
-
-        const texture = new THREE.VideoTexture(video);
-        const material = new THREE.MeshBasicMaterial({ map: texture });
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-
-        function animate() {
-            const dt = clock.getDelta();
-            mesh.rotation.y += dt; // rotate the video for demo purposes
-
-            renderer.setAnimationLoop(function () {
-                renderer.render(scene, camera);
-            });
-        }
-
-        window.addEventListener('click', function () { // start playing video on first user interaction
-            video.play();
+    <script>
+        document.querySelector('a-scene').addEventListener('loaded', function () {
+            var video = document.querySelector('#video');
+            if (video.paused) video.play();
         });
-
-        window.addEventListener('resize', onWindowResize, false);
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        animate();
     </script>
 </body>
 </html>
+
+
+
+
